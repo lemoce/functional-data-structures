@@ -1,10 +1,12 @@
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 
-module Data.Lemoce.Chap2.Set 
+module Data.Lemoce.Chap2.Set
   ( Set (..)
-  , UnbalancedSet (..)  
+  , UnbalancedSet (..)
   ) where
+
+import           Data.Maybe (fromMaybe)
 
 class Set t a where
   empty :: t a
@@ -16,13 +18,14 @@ data UnbalancedSet a = E | T (UnbalancedSet a) a (UnbalancedSet a)
 instance (Ord a) => Set UnbalancedSet a where
   empty = E
 
+  -- Grabbed the code from https://github.com/qnikst/okasaki/blob/master/ch02/ex_2_3.hs. Thanks for sharing.
   insert e E = T E e E
-  insert e t@(T l x r) =
-    if e < x
-      then T (insert e l) x r
-      else if e > x
-             then T l x (insert e r)
-             else t
+  insert e t@(T l x r) = fromMaybe t (insertHelper e t)
+    where insertHelper e E = Just (T E e E)
+          insertHelper e (T l x' r)
+            | e == x' = Nothing
+            | e < x' = fmap (\l' -> T l' x' r) (insertHelper e l)
+            | e > x' = fmap (\r' -> T l x' r') (insertHelper e r)
 
   member e E = False
   member e t@(T l y r) = memberHelper e y t
