@@ -31,9 +31,13 @@ spec = do
     it "test empty set" $ do
       (empty :: UnbalancedSet Int) `shouldBe` (E :: UnbalancedSet Int)
 
-    it "insert some element" $ do
+    it "insert 20 on set" $ do
       insert 20 (T (T (T E 1 E) 4 (T E 6 E)) 8 (T (T E 9 E) 30 (T E 31 E))) `shouldBe`
         (T (T (T E 1 E) 4 (T E 6 E)) 8 (T (T E 9 (T E 20 E)) 30 (T E 31 E)))
+
+    it "insert 10 on set" $ do
+      insert 10 (T (T (T E 1 E) 4 (T E 6 E)) 8 (T (T E 9 E) 30 (T E 31 E))) `shouldBe`
+        (T (T (T E 1 E) 4 (T E 6 E)) 8 (T (T E 9 (T E 10 E)) 30 (T E 31 E)))
 
     it "insert repeat element" $ do
       insert 31 (T (T (T E 1 E) 4 (T E 6 E)) 8 (T (T E 9 E) 30 (T E 31 E))) `shouldBe`

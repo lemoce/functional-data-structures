@@ -20,12 +20,13 @@ instance (Ord a) => Set UnbalancedSet a where
 
   -- Grabbed the code from https://github.com/qnikst/okasaki/blob/master/ch02/ex_2_3.hs. Thanks for sharing.
   insert e E = T E e E
-  insert e t@(T l x r) = fromMaybe t (insertHelper e t)
-    where insertHelper e E = Just (T E e E)
-          insertHelper e (T l x' r)
-            | e == x' = Nothing
-            | e < x' = fmap (\l' -> T l' x' r) (insertHelper e l)
-            | e > x' = fmap (\r' -> T l x' r') (insertHelper e r)
+  insert e t@(T l y r) = fromMaybe t (insertHelper e y t)
+    where insertHelper e x E  = if e == x
+                                    then Nothing
+                                    else Just (T E e E)
+          insertHelper e x (T l v r)
+            | e < v    = fmap (\l' -> T l' v r) (insertHelper e x l)
+            | otherwise = fmap (\r' -> T l v r') (insertHelper e v r)
 
   member e E = False
   member e t@(T l y r) = memberHelper e y t
