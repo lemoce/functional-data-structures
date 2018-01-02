@@ -4,6 +4,7 @@
 module Data.Lemoce.Chap2.Set
   ( Set (..)
   , UnbalancedSet (..)
+  , makeCompleteBinary
   ) where
 
 import           Data.Maybe (fromMaybe)
@@ -36,3 +37,9 @@ instance (Ord a) => Set UnbalancedSet a where
               then memberHelper e x l
               else memberHelper e y r
 
+
+makeCompleteBinary :: (Ord a) => a -> Int -> UnbalancedSet a
+makeCompleteBinary elem depth = makeHelper elem depth E
+  where makeHelper e n t
+          | n == 0 = t
+          | otherwise = makeHelper e (n - 1) (T t e t)

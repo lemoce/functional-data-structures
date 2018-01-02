@@ -42,3 +42,7 @@ spec = do
     it "insert repeat element" $ do
       insert 31 (T (T (T E 1 E) 4 (T E 6 E)) 8 (T (T E 9 E) 30 (T E 31 E))) `shouldBe`
         (T (T (T E 1 E) 4 (T E 6 E)) 8 (T (T E 9 E) 30 (T E 31 E)))
+
+    it "test complete binary tree" $ do
+      makeCompleteBinary 1 4 `shouldBe`
+        (T (T (T (T E 1 E) 1 (T E 1 E)) 1 (T (T E 1 E) 1 (T E 1 E))) 1 (T (T (T E 1 E) 1 (T E 1 E)) 1 (T (T E 1 E) 1 (T E 1 E))))
