@@ -54,7 +54,7 @@ makeBalancedTree elem 0 = Leaf
 makeBalancedTree elem size =
   let leftsize = (size - 1) `div` 2
       rightsize = (size - 1 - leftsize)
-      leftnode = makeBalancedTree elem (size - 1)
+      leftnode = makeBalancedTree elem leftsize
       rightnode = if leftsize == rightsize
                      then leftnode
                      else makeBalancedTree elem (rightsize)
