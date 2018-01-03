@@ -4,7 +4,9 @@
 module Data.Lemoce.Chap2.Set
   ( Set (..)
   , UnbalancedSet (..)
-  , makeCompleteBinary
+  , Tree (..)
+  , makeCompleteTree
+  , makeBalancedTree
   ) where
 
 import           Data.Maybe (fromMaybe)
@@ -38,8 +40,22 @@ instance (Ord a) => Set UnbalancedSet a where
               else memberHelper e y r
 
 
-makeCompleteBinary :: (Ord a) => a -> Int -> UnbalancedSet a
-makeCompleteBinary elem depth = makeHelper elem depth E
+data Tree a = Leaf | Branch (Tree a) a (Tree a)
+
+makeCompleteTree :: (Ord a) => a -> Int -> Tree a
+makeCompleteTree elem depth = makeHelper elem depth Leaf
   where makeHelper e n t
           | n == 0 = t
-          | otherwise = makeHelper e (n - 1) (T t e t)
+          | otherwise = makeHelper e (n - 1) (Branch t e t)
+
+
+makeBalancedTree :: (Ord a) => a -> Int -> Tree a
+makeBalancedTree elem 0 = Leaf
+makeBalancedTree elem size =
+  let leftsize = (size - 1) `mod` 2
+      rightsize = (size - 1 - leftsize)
+      leftnode = makeBalancedTree elem (size - 1)
+      rightnode = if leftsize == rightsize
+                     then leftnode
+                     else makeBalancedTree elem (rightsize)
+  in Branch leftnode elem rightnode
