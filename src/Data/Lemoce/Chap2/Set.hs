@@ -52,7 +52,7 @@ makeCompleteTree elem depth = makeHelper elem depth Leaf
 makeBalancedTree :: (Ord a) => a -> Int -> Tree a
 makeBalancedTree elem 0 = Leaf
 makeBalancedTree elem size =
-  let leftsize = (size - 1) `mod` 2
+  let leftsize = (size - 1) `div` 2
       rightsize = (size - 1 - leftsize)
       leftnode = makeBalancedTree elem (size - 1)
       rightnode = if leftsize == rightsize
