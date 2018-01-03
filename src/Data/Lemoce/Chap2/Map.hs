@@ -3,6 +3,7 @@
 
 module Data.Lemoce.Chap2.Map
   ( FiniteMap (..)
+  , UnbalancedMap (..)
   ) where
 
 import           Control.Exception
@@ -24,7 +25,8 @@ instance Exception NotFound
 instance (Ord k) => FiniteMap UnbalancedMap k v where
   empty = M E
 
-  bind key value m@(M t@(T _ y _)) = M (fromMaybe t (bindHelper (key, value) y t))
+  bind key value (M E) = M (T E (key, value) E)
+  bind key value m@(M t@(T ly y ry)) = M (fromMaybe t (bindHelper (key, value) y t))
     where bindHelper e@(ek, ev) (xk, xv) E = if ek == xk
                                                     then Nothing
                                                     else Just (T E e E)
