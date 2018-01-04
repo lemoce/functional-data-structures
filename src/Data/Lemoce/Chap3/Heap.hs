@@ -7,6 +7,7 @@ module Data.Lemoce.Chap3.Heap
 where
 
 import           Control.Exception
+import           Data.List         (dropWhile, head)
 
 data Empty = Empty deriving (Show, Eq)
 
@@ -20,7 +21,10 @@ class (Ord a) => Heap t a where
   findMin :: t a -> a
   deleteMin :: t a -> t a
 
-data HeapTree a = E | T Int a (HeapTree a) (HeapTree a)
+  singleton :: a -> t a
+  singleton x = insert x empty
+
+data HeapTree a = E | T Int a (HeapTree a) (HeapTree a) deriving Show
 
 instance (Ord a) => Heap HeapTree a where
   empty = E
@@ -49,3 +53,12 @@ instance (Ord a) => Heap HeapTree a where
 
   deleteMin E           = throw Empty
   deleteMin (T _ x a b) = merge a b
+
+
+fromList :: (Ord a) => [a] -> HeapTree a
+fromList xs = head . head . dropWhile ((/= 1) . length) $ iterate func $ map singleton xs
+  where
+    func :: (Ord a) => [HeapTree a] -> [HeapTree a]
+    func []       = []
+    func (x: [])  = [x]
+    func (x:y:xs) = merge x y : func xs
