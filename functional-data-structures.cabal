@@ -19,6 +19,7 @@ library
   exposed-modules:       Data.Lemoce.Chap2.Stack
                        , Data.Lemoce.Chap2.Set
                        , Data.Lemoce.Chap2.Map
+                       , Data.Lemoce.Chap3.Heap
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.9 && <4.10
