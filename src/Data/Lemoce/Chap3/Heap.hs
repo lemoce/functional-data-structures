@@ -3,7 +3,7 @@
 
 module Data.Lemoce.Chap3.Heap
   ( Heap (..)
-  , HeapTree (..))
+  , LeftistHeap (..))
 where
 
 import           Control.Exception
@@ -24,9 +24,12 @@ class (Ord a) => Heap t a where
   singleton :: a -> t a
   singleton x = insert x empty
 
-data HeapTree a = E | T Int a (HeapTree a) (HeapTree a) deriving Show
 
-instance (Ord a) => Heap HeapTree a where
+-- Used to call Height-Biased Leftist Tree
+-- http://web.onda.com.br/abveiga/capitulo5-ingles.pdf
+data LeftistHeap a = E | T Int a (LeftistHeap a) (LeftistHeap a) deriving Show
+
+instance (Ord a) => Heap LeftistHeap a where
   empty = E
   isEmpty E = True
   isEmpty _ = False
@@ -55,10 +58,11 @@ instance (Ord a) => Heap HeapTree a where
   deleteMin (T _ x a b) = merge a b
 
 
-fromList :: (Ord a) => [a] -> HeapTree a
+fromList :: (Ord a) => [a] -> LeftistHeap a
 fromList xs = head . head . dropWhile ((/= 1) . length) $ iterate func $ map singleton xs
   where
-    func :: (Ord a) => [HeapTree a] -> [HeapTree a]
+    func :: (Ord a) => [LeftistHeap a] -> [LeftistHeap a]
     func []       = []
     func (x: [])  = [x]
     func (x:y:xs) = merge x y : func xs
+
