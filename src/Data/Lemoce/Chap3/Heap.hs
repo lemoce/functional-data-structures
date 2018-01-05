@@ -1,7 +1,6 @@
 {-# LANGUAGE FlexibleInstances     #-}
-{-# LANGUAGE InstanceSigs          #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE RankNTypes            #-}
+
 
 module Data.Lemoce.Chap3.Heap
   ( Heap (..)
